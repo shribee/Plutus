@@ -1,0 +1,5 @@
+"date","bankdescription","accountnumber","employeename","description","usercomments","amount","net","vat",
+"2014-11-20","CHEQUE DEPOSIT 14803000000","55929590","Srikant Balan","Money Received from Employee","Personal HSBC to Business Acct.","100.00","100.00","0.00",
+"2014-12-16","GIRO: HARVEY NASH PURPLE AMETHYST LT","55929590","","Cash received from clients","Boden Nov '14 Payment","5400.00","5400.00","0.00",
+"2015-01-02","DD TO INTOUCH ACCOUNTING PURPLE AMETHYST LT","55929590","","Accountancy","Intouch Accountancy Fee ","-110.40","-110.40","0.00",
+"2015-01-08","GIRO: HARVEY NASH PURPLE AMETHYST LT","55929590","","Cash received from clients","","3420.90","3420.90","0.00",

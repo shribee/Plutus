@@ -1,0 +1,597 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="BusinessAccountingModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Date">
+          <Key>
+            <PropertyRef Name="LongDate" />
+          </Key>
+          <Property Name="LongDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DividendThreshold">
+          <Key>
+            <PropertyRef Name="ThresholdID" />
+          </Key>
+          <Property Name="ThresholdID" Type="int" Nullable="false" />
+          <Property Name="FinYear" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="MinAmount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="MaxAmount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="TaxPct" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="IsOptimumBand" Type="smallint" />
+          <Property Name="NetAmountCarryOver" Type="decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="Payee">
+          <Key>
+            <PropertyRef Name="PayeeID" />
+          </Key>
+          <Property Name="PayeeID" Type="int" Nullable="false" />
+          <Property Name="PayeeFriendlyName" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Salary">
+          <Key>
+            <PropertyRef Name="SalaryDate" />
+          </Key>
+          <Property Name="SalaryDate" Type="datetime" Nullable="false" />
+          <Property Name="TaxCode" Type="nvarchar" MaxLength="32" />
+          <Property Name="TotalPay" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="TaxDeducted" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="EmployeeNIC" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="EmployeePension" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="SickPay" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="ParentingPay" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="StudentLoan" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="NetPay" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="EmployerNIC" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="EmployerPension" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TransactionType">
+          <Key>
+            <PropertyRef Name="TransactionTypeID" />
+          </Key>
+          <Property Name="TransactionTypeID" Type="int" Nullable="false" />
+          <Property Name="Activity" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="TransactionCategory" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="TransactionSubCategory" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Transaction">
+          <Key>
+            <PropertyRef Name="TransactionID" />
+          </Key>
+          <Property Name="TransactionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SourceID" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PostedDate" Type="datetime" Nullable="false" />
+          <Property Name="EffectiveDate" Type="datetime" Nullable="false" />
+          <Property Name="TransactionTypeID" Type="int" Nullable="false" />
+          <Property Name="PayeeID" Type="int" Nullable="false" />
+          <Property Name="TransferType" Type="nvarchar" MaxLength="6" Nullable="false" />
+          <Property Name="Amount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="EffectiveAmount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="TransactionSource" Type="nvarchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="InputCatalog">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FileType" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="FileName" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ProcessedDateTime" Type="datetime" Nullable="false" />
+          <Property Name="NumRows" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Bank">
+          <Key>
+            <PropertyRef Name="FITID" />
+          </Key>
+          <Property Name="FITID" Type="bigint" Nullable="false" />
+          <Property Name="PostedDate" Type="datetime" Nullable="false" />
+          <Property Name="Amount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="PayeeFriendlyName" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Activity" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="TransferType" Type="nvarchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BankEdit">
+          <Key>
+            <PropertyRef Name="FITID" />
+          </Key>
+          <Property Name="FITID" Type="bigint" Nullable="false" />
+          <Property Name="EffectiveDate" Type="datetime" Nullable="false" />
+          <Property Name="EffectiveAmount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ExpenseEdit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="1024" Nullable="false" />
+          <Property Name="Detail" Type="nvarchar" MaxLength="1024" Nullable="false" />
+          <Property Name="Total" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="EffectiveDate" Type="datetime" Nullable="false" />
+          <Property Name="EffectiveDescription" Type="nvarchar" MaxLength="1024" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PayeeMapping">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="PayeeID" Type="int" Nullable="false" />
+          <Property Name="PayeeFriendlyName" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="PayeeSourceName" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="PayeeSource" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BankCaterAllen">
+          <Key>
+            <PropertyRef Name="FITID" />
+          </Key>
+          <Property Name="FITID" Type="bigint" Nullable="false" />
+          <Property Name="PostedDate" Type="datetime" Nullable="false" />
+          <Property Name="TxnType" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="1024" Nullable="false" />
+          <Property Name="Amount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BankIntouch">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="BankDescription" Type="nvarchar" MaxLength="1024" Nullable="false" />
+          <Property Name="AccountNumber" Type="nvarchar" MaxLength="128" />
+          <Property Name="EmployeeName" Type="nvarchar" MaxLength="128" />
+          <Property Name="Description" Type="nvarchar" MaxLength="1024" />
+          <Property Name="UserComments" Type="nvarchar" MaxLength="1024" />
+          <Property Name="Amount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Net" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="VAT" Type="decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="Expense">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="EmployeeName" Type="nvarchar" MaxLength="128" />
+          <Property Name="Description" Type="nvarchar" MaxLength="1024" Nullable="false" />
+          <Property Name="Detail" Type="nvarchar" MaxLength="1024" />
+          <Property Name="Total" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Net" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="VAT" Type="decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="Invoice">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="1024" Nullable="false" />
+          <Property Name="ContractReference" Type="nvarchar" MaxLength="1024" />
+          <Property Name="ClientName" Type="nvarchar" MaxLength="1024" />
+          <Property Name="InvoiceReference" Type="nvarchar" MaxLength="1024" />
+          <Property Name="Total" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Net" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="VAT" Type="decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityContainer Name="BusinessAccountingModelStoreContainer">
+          <EntitySet Name="Date" EntityType="Self.Date" Schema="DIM" store:Type="Tables" />
+          <EntitySet Name="DividendThreshold" EntityType="Self.DividendThreshold" Schema="DIM" store:Type="Tables" />
+          <EntitySet Name="Payee" EntityType="Self.Payee" Schema="DIM" store:Type="Tables" />
+          <EntitySet Name="Salary" EntityType="Self.Salary" Schema="DIM" store:Type="Tables" />
+          <EntitySet Name="TransactionType" EntityType="Self.TransactionType" Schema="DIM" store:Type="Tables" />
+          <EntitySet Name="Transaction" EntityType="Self.Transaction" Schema="FACT" store:Type="Tables" />
+          <EntitySet Name="InputCatalog" EntityType="Self.InputCatalog" Schema="MGMT" store:Type="Tables" />
+          <EntitySet Name="Bank" EntityType="Self.Bank" Schema="ODS" store:Type="Tables" />
+          <EntitySet Name="BankEdit" EntityType="Self.BankEdit" Schema="ODS" store:Type="Tables" />
+          <EntitySet Name="ExpenseEdit" EntityType="Self.ExpenseEdit" Schema="ODS" store:Type="Tables" />
+          <EntitySet Name="PayeeMapping" EntityType="Self.PayeeMapping" Schema="ODS" store:Type="Tables" />
+          <EntitySet Name="BankCaterAllen" EntityType="Self.BankCaterAllen" Schema="SRC" store:Type="Tables" />
+          <EntitySet Name="BankIntouch" EntityType="Self.BankIntouch" Schema="SRC" store:Type="Tables" />
+          <EntitySet Name="Expense" EntityType="Self.Expense" Schema="SRC" store:Type="Tables" />
+          <EntitySet Name="Invoice" EntityType="Self.Invoice" Schema="SRC" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BusinessAccountingModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Date">
+          <Key>
+            <PropertyRef Name="LongDate" />
+          </Key>
+          <Property Name="LongDate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="DividendThreshold">
+          <Key>
+            <PropertyRef Name="ThresholdID" />
+          </Key>
+          <Property Name="ThresholdID" Type="Int32" Nullable="false" />
+          <Property Name="FinYear" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MinAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="MaxAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="TaxPct" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="IsOptimumBand" Type="Int16" />
+          <Property Name="NetAmountCarryOver" Type="Decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="Payee">
+          <Key>
+            <PropertyRef Name="PayeeID" />
+          </Key>
+          <Property Name="PayeeID" Type="Int32" Nullable="false" />
+          <Property Name="PayeeFriendlyName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Salary">
+          <Key>
+            <PropertyRef Name="SalaryDate" />
+          </Key>
+          <Property Name="SalaryDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TaxCode" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="TotalPay" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="TaxDeducted" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="EmployeeNIC" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="EmployeePension" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="SickPay" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="ParentingPay" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="StudentLoan" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="NetPay" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="EmployerNIC" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="EmployerPension" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TransactionType">
+          <Key>
+            <PropertyRef Name="TransactionTypeID" />
+          </Key>
+          <Property Name="TransactionTypeID" Type="Int32" Nullable="false" />
+          <Property Name="Activity" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TransactionCategory" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TransactionSubCategory" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="InputCatalog">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FileType" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FileName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ProcessedDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="NumRows" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Bank">
+          <Key>
+            <PropertyRef Name="FITID" />
+          </Key>
+          <Property Name="FITID" Type="Int64" Nullable="false" />
+          <Property Name="PostedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Amount" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="PayeeFriendlyName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Activity" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TransferType" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BankEdit">
+          <Key>
+            <PropertyRef Name="FITID" />
+          </Key>
+          <Property Name="FITID" Type="Int64" Nullable="false" />
+          <Property Name="EffectiveDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EffectiveAmount" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ExpenseEdit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Description" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Detail" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Total" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="EffectiveDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EffectiveDescription" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PayeeMapping">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="PayeeID" Type="Int32" Nullable="false" />
+          <Property Name="PayeeFriendlyName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PayeeSourceName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PayeeSource" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BankCaterAllen">
+          <Key>
+            <PropertyRef Name="FITID" />
+          </Key>
+          <Property Name="FITID" Type="Int64" Nullable="false" />
+          <Property Name="PostedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TxnType" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Amount" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BankIntouch">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="BankDescription" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="AccountNumber" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" />
+          <Property Name="UserComments" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" />
+          <Property Name="Amount" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Net" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="VAT" Type="Decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="Expense">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EmployeeName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Detail" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" />
+          <Property Name="Total" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Net" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="VAT" Type="Decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="Invoice">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Description" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ContractReference" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" />
+          <Property Name="ClientName" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" />
+          <Property Name="InvoiceReference" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" />
+          <Property Name="Total" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Net" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="VAT" Type="Decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityContainer Name="BusinessAccountingEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Date" EntityType="Self.Date" />
+          <EntitySet Name="DividendThreshold" EntityType="Self.DividendThreshold" />
+          <EntitySet Name="Payee" EntityType="Self.Payee" />
+          <EntitySet Name="Salary" EntityType="Self.Salary" />
+          <EntitySet Name="TransactionType" EntityType="Self.TransactionType" />
+          <EntitySet Name="InputCatalog" EntityType="Self.InputCatalog" />
+          <EntitySet Name="Bank" EntityType="Self.Bank" />
+          <EntitySet Name="BankEdit" EntityType="Self.BankEdit" />
+          <EntitySet Name="ExpenseEdit" EntityType="Self.ExpenseEdit" />
+          <EntitySet Name="PayeeMapping" EntityType="Self.PayeeMapping" />
+          <EntitySet Name="BankCaterAllen" EntityType="Self.BankCaterAllen" />
+          <EntitySet Name="BankIntouch" EntityType="Self.BankIntouch" />
+          <EntitySet Name="Expense" EntityType="Self.Expense" />
+          <EntitySet Name="Invoice" EntityType="Self.Invoice" />
+          <EntitySet Name="Transaction" EntityType="BusinessAccountingModel.Transaction" />
+        </EntityContainer>
+        <EntityType Name="Transaction">
+          <Key>
+            <PropertyRef Name="TransactionID" />
+          </Key>
+          <Property Name="TransactionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PostedDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EffectiveDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TransactionTypeID" Type="Int32" Nullable="false" />
+          <Property Name="PayeeID" Type="Int32" Nullable="false" />
+          <Property Name="TransferType" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="true" />
+          <Property Name="Amount" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="EffectiveAmount" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="TransactionSource" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="SourceID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BusinessAccountingModelStoreContainer" CdmEntityContainer="BusinessAccountingEntities">
+          <EntitySetMapping Name="Date">
+            <EntityTypeMapping TypeName="BusinessAccountingModel.Date">
+              <MappingFragment StoreEntitySet="Date">
+                <ScalarProperty Name="LongDate" ColumnName="LongDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DividendThreshold">
+            <EntityTypeMapping TypeName="BusinessAccountingModel.DividendThreshold">
+              <MappingFragment StoreEntitySet="DividendThreshold">
+                <ScalarProperty Name="ThresholdID" ColumnName="ThresholdID" />
+                <ScalarProperty Name="FinYear" ColumnName="FinYear" />
+                <ScalarProperty Name="MinAmount" ColumnName="MinAmount" />
+                <ScalarProperty Name="MaxAmount" ColumnName="MaxAmount" />
+                <ScalarProperty Name="TaxPct" ColumnName="TaxPct" />
+                <ScalarProperty Name="IsOptimumBand" ColumnName="IsOptimumBand" />
+                <ScalarProperty Name="NetAmountCarryOver" ColumnName="NetAmountCarryOver" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Payee">
+            <EntityTypeMapping TypeName="BusinessAccountingModel.Payee">
+              <MappingFragment StoreEntitySet="Payee">
+                <ScalarProperty Name="PayeeID" ColumnName="PayeeID" />
+                <ScalarProperty Name="PayeeFriendlyName" ColumnName="PayeeFriendlyName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Salary">
+            <EntityTypeMapping TypeName="BusinessAccountingModel.Salary">
+              <MappingFragment StoreEntitySet="Salary">
+                <ScalarProperty Name="SalaryDate" ColumnName="SalaryDate" />
+                <ScalarProperty Name="TaxCode" ColumnName="TaxCode" />
+                <ScalarProperty Name="TotalPay" ColumnName="TotalPay" />
+                <ScalarProperty Name="TaxDeducted" ColumnName="TaxDeducted" />
+                <ScalarProperty Name="EmployeeNIC" ColumnName="EmployeeNIC" />
+                <ScalarProperty Name="EmployeePension" ColumnName="EmployeePension" />
+                <ScalarProperty Name="SickPay" ColumnName="SickPay" />
+                <ScalarProperty Name="ParentingPay" ColumnName="ParentingPay" />
+                <ScalarProperty Name="StudentLoan" ColumnName="StudentLoan" />
+                <ScalarProperty Name="NetPay" ColumnName="NetPay" />
+                <ScalarProperty Name="EmployerNIC" ColumnName="EmployerNIC" />
+                <ScalarProperty Name="EmployerPension" ColumnName="EmployerPension" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TransactionType">
+            <EntityTypeMapping TypeName="BusinessAccountingModel.TransactionType">
+              <MappingFragment StoreEntitySet="TransactionType">
+                <ScalarProperty Name="TransactionTypeID" ColumnName="TransactionTypeID" />
+                <ScalarProperty Name="Activity" ColumnName="Activity" />
+                <ScalarProperty Name="TransactionCategory" ColumnName="TransactionCategory" />
+                <ScalarProperty Name="TransactionSubCategory" ColumnName="TransactionSubCategory" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="InputCatalog">
+            <EntityTypeMapping TypeName="BusinessAccountingModel.InputCatalog">
+              <MappingFragment StoreEntitySet="InputCatalog">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="FileType" ColumnName="FileType" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="ProcessedDateTime" ColumnName="ProcessedDateTime" />
+                <ScalarProperty Name="NumRows" ColumnName="NumRows" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Bank">
+            <EntityTypeMapping TypeName="BusinessAccountingModel.Bank">
+              <MappingFragment StoreEntitySet="Bank">
+                <ScalarProperty Name="FITID" ColumnName="FITID" />
+                <ScalarProperty Name="PostedDate" ColumnName="PostedDate" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="PayeeFriendlyName" ColumnName="PayeeFriendlyName" />
+                <ScalarProperty Name="Activity" ColumnName="Activity" />
+                <ScalarProperty Name="TransferType" ColumnName="TransferType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BankEdit">
+            <EntityTypeMapping TypeName="BusinessAccountingModel.BankEdit">
+              <MappingFragment StoreEntitySet="BankEdit">
+                <ScalarProperty Name="EffectiveAmount" ColumnName="EffectiveAmount" />
+                <ScalarProperty Name="FITID" ColumnName="FITID" />
+                <ScalarProperty Name="EffectiveDate" ColumnName="EffectiveDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExpenseEdit">
+            <EntityTypeMapping TypeName="BusinessAccountingModel.ExpenseEdit">
+              <MappingFragment StoreEntitySet="ExpenseEdit">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Detail" ColumnName="Detail" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="EffectiveDate" ColumnName="EffectiveDate" />
+                <ScalarProperty Name="EffectiveDescription" ColumnName="EffectiveDescription" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PayeeMapping">
+            <EntityTypeMapping TypeName="BusinessAccountingModel.PayeeMapping">
+              <MappingFragment StoreEntitySet="PayeeMapping">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="PayeeID" ColumnName="PayeeID" />
+                <ScalarProperty Name="PayeeFriendlyName" ColumnName="PayeeFriendlyName" />
+                <ScalarProperty Name="PayeeSourceName" ColumnName="PayeeSourceName" />
+                <ScalarProperty Name="PayeeSource" ColumnName="PayeeSource" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BankCaterAllen">
+            <EntityTypeMapping TypeName="BusinessAccountingModel.BankCaterAllen">
+              <MappingFragment StoreEntitySet="BankCaterAllen">
+                <ScalarProperty Name="FITID" ColumnName="FITID" />
+                <ScalarProperty Name="PostedDate" ColumnName="PostedDate" />
+                <ScalarProperty Name="TxnType" ColumnName="TxnType" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BankIntouch">
+            <EntityTypeMapping TypeName="BusinessAccountingModel.BankIntouch">
+              <MappingFragment StoreEntitySet="BankIntouch">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="BankDescription" ColumnName="BankDescription" />
+                <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="UserComments" ColumnName="UserComments" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Net" ColumnName="Net" />
+                <ScalarProperty Name="VAT" ColumnName="VAT" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Expense">
+            <EntityTypeMapping TypeName="BusinessAccountingModel.Expense">
+              <MappingFragment StoreEntitySet="Expense">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Detail" ColumnName="Detail" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Net" ColumnName="Net" />
+                <ScalarProperty Name="VAT" ColumnName="VAT" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Invoice">
+            <EntityTypeMapping TypeName="BusinessAccountingModel.Invoice">
+              <MappingFragment StoreEntitySet="Invoice">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ContractReference" ColumnName="ContractReference" />
+                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
+                <ScalarProperty Name="InvoiceReference" ColumnName="InvoiceReference" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Net" ColumnName="Net" />
+                <ScalarProperty Name="VAT" ColumnName="VAT" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Transaction">
+            <EntityTypeMapping TypeName="BusinessAccountingModel.Transaction">
+              <MappingFragment StoreEntitySet="Transaction">
+                <ScalarProperty Name="SourceID" ColumnName="SourceID" />
+                <ScalarProperty Name="TransactionSource" ColumnName="TransactionSource" />
+                <ScalarProperty Name="EffectiveAmount" ColumnName="EffectiveAmount" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="TransferType" ColumnName="TransferType" />
+                <ScalarProperty Name="PayeeID" ColumnName="PayeeID" />
+                <ScalarProperty Name="TransactionTypeID" ColumnName="TransactionTypeID" />
+                <ScalarProperty Name="EffectiveDate" ColumnName="EffectiveDate" />
+                <ScalarProperty Name="PostedDate" ColumnName="PostedDate" />
+                <ScalarProperty Name="TransactionID" ColumnName="TransactionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

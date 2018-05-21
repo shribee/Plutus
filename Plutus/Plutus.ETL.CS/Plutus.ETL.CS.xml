@@ -1,0 +1,573 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Plutus.ETL.CS</name>
+    </assembly>
+    <members>
+        <member name="T:Plutus.ETL.CS.Controller.ApplicationController">
+            <summary>
+            Static Controller process for the Application containing only methods to drive the Application
+            </summary>
+        </member>
+        <member name="F:Plutus.ETL.CS.Controller.ApplicationController.logger">
+            <summary>
+            Create logger for the class
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Controller.ApplicationController.IdentifyNewFiles(Plutus.ETL.CS.Controller.ApplicationSettings)">
+            <summary>
+            Scan input folder for available files
+            </summary>
+        </member>
+        <member name="T:Plutus.ETL.CS.Controller.ApplicationSettings">
+            <summary>
+            Singleton class to hold application settings
+            </summary>
+        </member>
+        <member name="F:Plutus.ETL.CS.Controller.ApplicationSettings.logger">
+            <summary>
+            Create logger for the class
+            </summary>
+        </member>
+        <member name="P:Plutus.ETL.CS.Controller.ApplicationSettings.Instance">
+            <summary>
+            Single instance reference of singleton
+            </summary>
+        </member>
+        <member name="P:Plutus.ETL.CS.Controller.ApplicationSettings.InputFileList">
+            <summary>
+            List of files in the CSV folder
+            </summary>
+        </member>
+        <member name="P:Plutus.ETL.CS.Controller.ApplicationSettings.InputDataFolder">
+            <summary>
+            Sub-folder in which csv files are located
+            </summary>
+        </member>
+        <member name="P:Plutus.ETL.CS.Controller.ApplicationSettings.StartDate">
+            <summary>
+            Starting Date in the Date dimension
+            </summary>
+        </member>
+        <member name="P:Plutus.ETL.CS.Controller.ApplicationSettings.EndDate">
+            <summary>
+            Ending Date in the Date dimension
+            </summary>
+        </member>
+        <member name="P:Plutus.ETL.CS.Controller.ApplicationSettings.ResetData">
+            <summary>
+            Flag to indicate whether to clear and reload Fact, ODS tables
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Controller.ApplicationSettings.Initialize">
+            <summary>
+            Initialize Singleton
+            </summary>
+        </member>
+        <member name="T:Plutus.ETL.CS.Model.ClearDown">
+            <summary>
+            Static class containing methods to clear down DB
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Model.ClearDown.ClearDIMSRCEntity(System.String)">
+            <summary>
+            Static method to clear DIM and SRC tables
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Model.ClearDown.ClearTransaction(Plutus.ETL.CS.Controller.ApplicationSettings)">
+            <summary>
+            Static method to empty Transactions
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Model.ClearDown.ClearBank(Plutus.ETL.CS.Controller.ApplicationSettings)">
+            <summary>
+            Static method to empty Bank
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Model.ClearDown.ClearBankEdit(Plutus.ETL.CS.Controller.ApplicationSettings)">
+            <summary>
+            Static method to empty BankEdit
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Model.ClearDown.ClearExpenseEdit(Plutus.ETL.CS.Controller.ApplicationSettings)">
+            <summary>
+            Static method to empty ExpenseEdit
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Model.ClearDown.ClearPayeeMapping(Plutus.ETL.CS.Controller.ApplicationSettings)">
+            <summary>
+            Static method to empty PayeeMapping
+            </summary>
+        </member>
+        <member name="T:Plutus.ETL.CS.Model.BankCaterAllen">
+            <summary>
+            Partial class to add overriding equality methods
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Model.BankCaterAllen.Equals(Plutus.ETL.CS.Model.BankCaterAllen)">
+            <summary>
+            Overriding equatable method
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Model.BankCaterAllen.GetHashCode">
+            <summary>
+            Hash code for the transaction for equality checks
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Model.BankEdit.Equals(Plutus.ETL.CS.Model.BankEdit)">
+            <summary>
+            Overriding equatable method
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Model.BankEdit.GetHashCode">
+            <summary>
+            Hash code for the transaction for equality checks
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Model.Bank.Equals(Plutus.ETL.CS.Model.Bank)">
+            <summary>
+            Overriding equatable method
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Model.Bank.GetHashCode">
+            <summary>
+            Hash code for the transaction for equality checks
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Model.BankIntouch.Equals(Plutus.ETL.CS.Model.BankIntouch)">
+            <summary>
+            Overriding equatable method
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Model.BankIntouch.GetHashCode">
+            <summary>
+            Hash code for the transaction for equality checks
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Model.ExpenseEdit.Equals(Plutus.ETL.CS.Model.ExpenseEdit)">
+            <summary>
+            Overriding equatable method
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Model.ExpenseEdit.GetHashCode">
+            <summary>
+            Hash code for the transaction for equality checks
+            </summary>
+        </member>
+        <member name="T:Plutus.ETL.CS.Model.DirectoryFile">
+            <summary>
+            Public class for file system directory file objects
+            </summary>
+        </member>
+        <member name="P:Plutus.ETL.CS.Model.DirectoryFile.FolderName">
+            <summary>
+            File folder name minus file name
+            </summary>
+        </member>
+        <member name="P:Plutus.ETL.CS.Model.DirectoryFile.FullFileName">
+            <summary>
+            Full File name plus folder name
+            </summary>
+        </member>
+        <member name="P:Plutus.ETL.CS.Model.DirectoryFile.FileName">
+            <summary>
+            File name minus folder name
+            </summary>
+        </member>
+        <member name="P:Plutus.ETL.CS.Model.DirectoryFile.FileType">
+            <summary>
+            Enum file type
+            </summary>
+        </member>
+        <member name="P:Plutus.ETL.CS.Model.DirectoryFile.FileStatus">
+            <summary>
+            Enum file status
+            </summary>
+        </member>
+        <member name="P:Plutus.ETL.CS.Model.DirectoryFile.FileContent">
+            <summary>
+            Contents of file
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Model.DirectoryFile.#ctor(System.String,System.String,System.String,Plutus.ETL.CS.Model.Enum.FileStatus,Plutus.ETL.CS.Model.Enum.FileType)">
+            <summary>
+            Constructor with most parameters
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Model.DirectoryFile.#ctor(System.String,System.String,System.String,Plutus.ETL.CS.Model.Enum.FileStatus,Plutus.ETL.CS.Model.Enum.FileType,System.String)">
+            <summary>
+            Constructor with all parameters
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Model.DirectoryFile.#ctor(System.String,System.String,System.String,Plutus.ETL.CS.Model.Enum.FileStatus)">
+            <summary>
+            Constructor with most basic mandatory parameters
+            </summary>
+        </member>
+        <member name="T:Plutus.ETL.CS.Model.Enum">
+            <summary>
+            Public static class to contained all application enums
+            </summary>
+        </member>
+        <member name="T:Plutus.ETL.CS.Model.Enum.FileStatus">
+            <summary>
+            Enum to mark the life-cycle of a File
+            </summary>
+        </member>
+        <member name="F:Plutus.ETL.CS.Model.Enum.FileStatus.ReadFromFileSystem">
+            <summary>
+            Initial state when file is read from file system
+            </summary>
+        </member>
+        <member name="F:Plutus.ETL.CS.Model.Enum.FileStatus.Processed">
+            <summary>
+            State after file has been processed
+            </summary>
+        </member>
+        <member name="T:Plutus.ETL.CS.Model.Enum.FileType">
+            <summary>
+            Enum to indicate type of file
+            </summary>
+        </member>
+        <member name="F:Plutus.ETL.CS.Model.Enum.FileType.BankIntouch">
+            <summary>
+            File containing Bank transaction received from Intouch
+            </summary>
+        </member>
+        <member name="F:Plutus.ETL.CS.Model.Enum.FileType.BankCaterAllen">
+            <summary>
+            File containing Bank transaction received from Cater Allen
+            </summary>
+        </member>
+        <member name="F:Plutus.ETL.CS.Model.Enum.FileType.Invoice">
+            <summary>
+            File containing Invoice
+            </summary>
+        </member>
+        <member name="F:Plutus.ETL.CS.Model.Enum.FileType.Expense">
+            <summary>
+            File containing Expense
+            </summary>
+        </member>
+        <member name="F:Plutus.ETL.CS.Model.Enum.FileType.DividendThreshold">
+            <summary>
+            File containing Dividend Threshold
+            </summary>
+        </member>
+        <member name="F:Plutus.ETL.CS.Model.Enum.FileType.Payee">
+            <summary>
+            File containing DIM Payee (one per payee)
+            </summary>
+        </member>
+        <member name="F:Plutus.ETL.CS.Model.Enum.FileType.PayeeMapping">
+            <summary>
+            File containing Payee mapping to source names (one per payee)
+            </summary>
+        </member>
+        <member name="F:Plutus.ETL.CS.Model.Enum.FileType.Salary">
+            <summary>
+            File containing Salary details
+            </summary>
+        </member>
+        <member name="F:Plutus.ETL.CS.Model.Enum.FileType.TransactionType">
+            <summary>
+            File containing Transaction types
+            </summary>
+        </member>
+        <member name="F:Plutus.ETL.CS.Model.Enum.FileType.Bank">
+            <summary>
+            File containing Bank transaction from Cater Allen enriched with transaction type, transfer type
+            </summary>
+        </member>
+        <member name="F:Plutus.ETL.CS.Model.Enum.FileType.BankEdit">
+            <summary>
+            File containing Bank transaction from Cater Allen with effective date different from transaction date
+            </summary>
+        </member>
+        <member name="F:Plutus.ETL.CS.Model.Enum.FileType.ExpenseEdit">
+            <summary>
+            File containing Expense records with effective date different from transaction date
+            </summary>
+        </member>
+        <member name="F:Plutus.ETL.CS.Model.Enum.FileType.Invalid">
+            <summary>
+            Invalid Files
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Model.Expense.Equals(Plutus.ETL.CS.Model.Expense)">
+            <summary>
+            Overriding equatable method
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Model.Expense.GetHashCode">
+            <summary>
+            Hash code for the transaction for equality checks
+            </summary>
+        </member>
+        <member name="T:Plutus.ETL.CS.Model.Invoice">
+            <summary>
+            Partial class to add overriding equality methods
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Model.Invoice.Equals(Plutus.ETL.CS.Model.Invoice)">
+            <summary>
+            Overriding equatable method
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Model.Invoice.GetHashCode">
+            <summary>
+            Hash code for the transaction for equality checks
+            </summary>
+        </member>
+        <member name="T:Plutus.ETL.CS.Processor.ProcessBankCaterAllen">
+            <summary>
+            Static class to process Bank Cater Allen data
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Processor.ProcessBankCaterAllen.ProcessAllFiles(Plutus.ETL.CS.Controller.ApplicationSettings)">
+            <summary>
+            Static method to cycle through file list and process all BankIntouch files
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Processor.ProcessBankCaterAllen.ProcessBankCaterAllenData(Plutus.ETL.CS.Model.DirectoryFile)">
+            <summary>
+            Process all Bank Cater Allen XMLs
+            </summary>
+        </member>
+        <member name="T:Plutus.ETL.CS.Processor.ProcessBankEdit">
+            <summary>
+            Static class to process BankEdit Intouch data
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Processor.ProcessBankEdit.ProcessAllFiles(Plutus.ETL.CS.Controller.ApplicationSettings)">
+            <summary>
+            Static method to cycle through file list and process all BankIntouch files
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Processor.ProcessBankEdit.ProcessBankEditData(Plutus.ETL.CS.Model.DirectoryFile)">
+            <summary>
+            Process all Intouch BankEdit CSVs
+            </summary>
+        </member>
+        <member name="T:Plutus.ETL.CS.Processor.ProcessBank">
+            <summary>
+            Static class to process Bank Intouch data
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Processor.ProcessBank.ProcessAllFiles(Plutus.ETL.CS.Controller.ApplicationSettings)">
+            <summary>
+            Static method to cycle through file list and process all BankIntouch files
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Processor.ProcessBank.ProcessBankData(Plutus.ETL.CS.Model.DirectoryFile)">
+            <summary>
+            Process all Intouch Bank CSVs
+            </summary>
+        </member>
+        <member name="T:Plutus.ETL.CS.Processor.ProcessBankIntouch">
+            <summary>
+            Static class to process Bank Intouch data
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Processor.ProcessBankIntouch.ProcessAllFiles(Plutus.ETL.CS.Controller.ApplicationSettings)">
+            <summary>
+            Static method to cycle through file list and process all BankIntouch files
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Processor.ProcessBankIntouch.ProcessBankIntouchData(Plutus.ETL.CS.Model.DirectoryFile)">
+            <summary>
+            Process all Intouch Bank CSVs
+            </summary>
+        </member>
+        <member name="T:Plutus.ETL.CS.Processor.ProcessDate">
+            <summary>
+            Static class to Load dates
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Processor.ProcessDate.LoadDates(Plutus.ETL.CS.Controller.ApplicationSettings)">
+            <summary>
+            Static method to process Date
+            </summary>
+        </member>
+        <member name="T:Plutus.ETL.CS.Processor.ProcessDividendThreshold">
+            <summary>
+            Static class to process Dividend Threshold data
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Processor.ProcessDividendThreshold.ProcessAllFiles(Plutus.ETL.CS.Controller.ApplicationSettings)">
+            <summary>
+            Static method to cycle through file list and process all BankIntouch files
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Processor.ProcessDividendThreshold.ProcessDividendThresholdData(Plutus.ETL.CS.Model.DirectoryFile)">
+            <summary>
+            Process DividendThreshold CSV
+            </summary>
+        </member>
+        <member name="T:Plutus.ETL.CS.Processor.ProcessExpenseEdit">
+            <summary>
+            Static class to process ExpenseEdit Intouch data
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Processor.ProcessExpenseEdit.ProcessAllFiles(Plutus.ETL.CS.Controller.ApplicationSettings)">
+            <summary>
+            Static method to cycle through file list and process all BankIntouch files
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Processor.ProcessExpenseEdit.ProcessExpenseEditData(Plutus.ETL.CS.Model.DirectoryFile)">
+            <summary>
+            Process all Intouch ExpenseEdit CSVs
+            </summary>
+        </member>
+        <member name="T:Plutus.ETL.CS.Processor.ProcessPayee">
+            <summary>
+            Static class to process Payee data
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Processor.ProcessPayee.ProcessAllFiles(Plutus.ETL.CS.Controller.ApplicationSettings)">
+            <summary>
+            Static method to cycle through file list and process all BankIntouch files
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Processor.ProcessPayee.ProcessPayeeData(Plutus.ETL.CS.Model.DirectoryFile)">
+            <summary>
+            Process Payee CSV
+            </summary>
+        </member>
+        <member name="T:Plutus.ETL.CS.Processor.ProcessSalary">
+            <summary>
+            Static class to process Salary data
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Processor.ProcessSalary.ProcessAllFiles(Plutus.ETL.CS.Controller.ApplicationSettings)">
+            <summary>
+            Static method to cycle through file list and process all BankIntouch files
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Processor.ProcessSalary.ProcessSalaryData(Plutus.ETL.CS.Model.DirectoryFile)">
+            <summary>
+            Process Salary CSV
+            </summary>
+        </member>
+        <member name="T:Plutus.ETL.CS.Processor.ProcessTransaction">
+            <summary>
+            Static class to process Transaction data
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Processor.ProcessTransaction.ProcessSalaryTransaction(Plutus.ETL.CS.Controller.ApplicationSettings)">
+            <summary>
+            Static method to load Salary Transactions
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Processor.ProcessTransaction.ProcessExpenseTransaction(Plutus.ETL.CS.Controller.ApplicationSettings)">
+            <summary>
+            Static method to load Expense Transactions
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Processor.ProcessTransaction.ProcessBankTransaction(Plutus.ETL.CS.Controller.ApplicationSettings)">
+            <summary>
+            Static method to load Bank Transactions
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Processor.ProcessTransaction.AddTransaction(Plutus.ETL.CS.Controller.ApplicationSettings,System.Collections.Generic.List{Plutus.ETL.CS.Model.Transaction},System.String)">
+            <summary>
+            Take in a list of transactions and add them to Entity if not already exists
+            </summary>
+        </member>
+        <member name="T:Plutus.ETL.CS.Processor.ProcessTransactionType">
+            <summary>
+            Static class to process TransactionType data
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Processor.ProcessTransactionType.ProcessAllFiles(Plutus.ETL.CS.Controller.ApplicationSettings)">
+            <summary>
+            Static method to cycle through file list and process all BankIntouch files
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Processor.ProcessTransactionType.ProcessTransactionTypeData(Plutus.ETL.CS.Model.DirectoryFile)">
+            <summary>
+            Process TransactionType CSV
+            </summary>
+        </member>
+        <member name="T:Plutus.ETL.CS.Processor.ProcessExpense">
+            <summary>
+            Static class to process Expense data
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Processor.ProcessExpense.ProcessAllFiles(Plutus.ETL.CS.Controller.ApplicationSettings)">
+            <summary>
+            Static method to cycle through file list and process all BankIntouch files
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Processor.ProcessExpense.ProcessExpenseData(Plutus.ETL.CS.Model.DirectoryFile)">
+            <summary>
+            Process all Intouch Expense CSVs
+            </summary>
+        </member>
+        <member name="T:Plutus.ETL.CS.Processor.ProcessInvoice">
+            <summary>
+            Static class to process Invoice data
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Processor.ProcessInvoice.ProcessAllFiles(Plutus.ETL.CS.Controller.ApplicationSettings)">
+            <summary>
+            Static method to cycle through file list and process all BankIntouch files
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Processor.ProcessInvoice.ProcessInvoiceData(Plutus.ETL.CS.Model.DirectoryFile)">
+            <summary>
+            Process all Invoice CSVs
+            </summary>
+        </member>
+        <member name="T:Plutus.ETL.CS.Processor.ProcessPayeeMapping">
+            <summary>
+            Static class to process PayeeMappingMapping data
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Processor.ProcessPayeeMapping.ProcessAllFiles(Plutus.ETL.CS.Controller.ApplicationSettings)">
+            <summary>
+            Static method to cycle through file list and process all BankIntouch files
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Processor.ProcessPayeeMapping.ProcessPayeeMappingData(Plutus.ETL.CS.Model.DirectoryFile)">
+            <summary>
+            Process PayeeMapping CSV
+            </summary>
+        </member>
+        <member name="T:Plutus.ETL.CS.Utility.FileUtility">
+            <summary>
+            Staic class for interacting with the file system
+            </summary>
+        </member>
+        <member name="F:Plutus.ETL.CS.Utility.FileUtility.logger">
+            <summary>
+            Create logger for the class
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Utility.FileUtility.ReadFile(System.String)">
+            <summary>
+            Takes in a full file name and populates a supplied string with its contents
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Utility.FileUtility.CSVReader(System.String,System.String,System.Collections.Generic.List{System.String[]},System.Int32,System.Boolean)">
+            <summary>
+            Takes in csv file name and populates a supplied List of string array
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Utility.FileUtility.CSVStringReader(System.String,System.String,System.Collections.Generic.List{System.String[]},System.Int32,System.Boolean)">
+            <summary>
+            Takes in csv string and populates a supplied List of string array
+            </summary>
+        </member>
+        <member name="T:Plutus.ETL.CS.Program">
+            <summary>
+            Main class for application
+            </summary>
+        </member>
+        <member name="M:Plutus.ETL.CS.Program.Main(System.String[])">
+            <summary>
+            Main method for entry into application
+            </summary>
+        </member>
+    </members>
+</doc>

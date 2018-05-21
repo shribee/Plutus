@@ -1,0 +1,18 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Plutus.ETL.CS.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="InputData" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\Documents\Limited Company\Personal Account Tracking\InputData\</Value>
+    </Setting>
+    <Setting Name="StartDate" Type="System.String" Scope="User">
+      <Value Profile="(Default)">2014-11-01</Value>
+    </Setting>
+    <Setting Name="EndDate" Type="System.String" Scope="User">
+      <Value Profile="(Default)">2019-11-01</Value>
+    </Setting>
+    <Setting Name="ResetData" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

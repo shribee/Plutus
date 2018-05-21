@@ -1,0 +1,1016 @@
+{
+  "name": "SemanticModel",
+  "compatibilityLevel": 1200,
+  "model": {
+    "culture": "en-US",
+    "dataSources": [
+      {
+        "name": "BusinessAccounting",
+        "connectionString": "Provider=SQLNCLI11;Data Source=.;Initial Catalog=BusinessAccounting;Integrated Security=SSPI;Persist Security Info=false",
+        "impersonationMode": "impersonateServiceAccount",
+        "annotations": [
+          {
+            "name": "ConnectionEditUISource",
+            "value": "SqlServer"
+          }
+        ]
+      }
+    ],
+    "tables": [
+      {
+        "name": "Transaction",
+        "columns": [
+          {
+            "name": "TransactionID",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "TransactionID"
+          },
+          {
+            "name": "PostedDate",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "PostedDate",
+            "formatString": "yyyy-MM-dd",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\" xmlns=\"\"><DateTimes><DateTime LCID=\"2057\" Group=\"ShortDate\" FormatString=\"yyyy-MM-dd\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "EffectiveDate",
+            "dataType": "dateTime",
+            "isHidden": true,
+            "sourceColumn": "EffectiveDate",
+            "formatString": "yyyy-MM-dd",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\" xmlns=\"\"><DateTimes><DateTime LCID=\"2057\" Group=\"ShortDate\" FormatString=\"yyyy-MM-dd\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "TransactionTypeID",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "TransactionTypeID"
+          },
+          {
+            "name": "PayeeID",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "PayeeID"
+          },
+          {
+            "name": "TransferType",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "TransferType"
+          },
+          {
+            "name": "Amount",
+            "dataType": "double",
+            "isHidden": true,
+            "sourceColumn": "Amount"
+          },
+          {
+            "name": "TransactionSource",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "TransactionSource"
+          },
+          {
+            "type": "calculated",
+            "name": "Actual VAT",
+            "dataType": "double",
+            "isDataTypeInferred": true,
+            "isHidden": true,
+            "expression": [
+              "IF(RELATED(TransactionType[TransactionSubCategory])=\"Income\"",
+              ", IF([PostedDate] <= DATE(2015,11,4), [Amount] *0.135",
+              ", IF([PostedDate] <= DATE(2017,4,5),[Amount] *0.145,[Amount] *0.165)), 0)"
+            ],
+            "formatString": "\"£\"#,0.00;-\"£\"#,0.00;\"£\"#,0.00",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\" ThousandSeparator=\"True\" xmlns=\"\"><Currency LCID=\"2057\" DisplayName=\"£ English (United Kingdom)\" Symbol=\"£\" PositivePattern=\"0\" NegativePattern=\"1\" /></Format>"
+              }
+            ]
+          },
+          {
+            "type": "calculated",
+            "name": "Paid VAT",
+            "dataType": "double",
+            "isDataTypeInferred": true,
+            "isHidden": true,
+            "expression": "IF(RELATED(TransactionType[TransactionSubCategory])=\"Income\", [Amount]/6, 0)"
+          },
+          {
+            "name": "EffectiveAmount",
+            "dataType": "double",
+            "isHidden": true,
+            "sourceColumn": "EffectiveAmount"
+          },
+          {
+            "name": "SourceID",
+            "dataType": "string",
+            "isHidden": true,
+            "sourceColumn": "SourceID"
+          },
+          {
+            "type": "calculated",
+            "name": "TransactionSubCategory",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": "RELATED(TransactionType[TransactionSubCategory])"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "vw_Transaction",
+            "source": {
+              "query": [
+                "SELECT ",
+                "[TransactionID]",
+                ",[SourceID]",
+                ",[PostedDate]",
+                ",[EffectiveDate]",
+                ",[TransactionTypeID]",
+                ",[PayeeID]",
+                ",[TransferType]",
+                ",[Amount]",
+                ",[EffectiveAmount]",
+                ",[TransactionSource] ",
+                "FROM [FACT].[vw_Transaction]"
+              ],
+              "dataSource": "BusinessAccounting"
+            },
+            "annotations": [
+              {
+                "name": "QueryEditorSerialization",
+                "value": [
+                  "<?xml version=\"1.0\" encoding=\"UTF-16\"?><Gemini xmlns=\"QueryEditorSerialization\"><AnnotationContent><![CDATA[<RSQueryCommandText>SELECT ",
+                  "[TransactionID]",
+                  ",[SourceID]",
+                  ",[PostedDate]",
+                  ",[EffectiveDate]",
+                  ",[TransactionTypeID]",
+                  ",[PayeeID]",
+                  ",[TransferType]",
+                  ",[Amount]",
+                  ",[EffectiveAmount]",
+                  ",[TransactionSource] ",
+                  "FROM [FACT].[vw_Transaction]</RSQueryCommandText><RSQueryCommandType>Text</RSQueryCommandType><RSQueryDesignState></RSQueryDesignState>]]></AnnotationContent></Gemini>"
+                ]
+              }
+            ]
+          }
+        ],
+        "measures": [
+          {
+            "name": "Core.OtherExpenses",
+            "expression": [
+              "CALCULATE(SUMX('Transaction', IF('Transaction'[TransactionSubCategory] = \"Other Expense\"",
+              ", [Amount], 0))",
+              ",USERELATIONSHIP('Date'[LongDate], 'Transaction'[EffectiveDate]))*-1"
+            ],
+            "formatString": "\"£\"#,0.00;-\"£\"#,0.00;\"£\"#,0.00",
+            "displayFolder": "Core",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"2057\" DisplayName=\"£ English (United Kingdom)\" Symbol=\"£\" PositivePattern=\"0\" NegativePattern=\"1\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Core.SalesInvoices",
+            "expression": [
+              "CALCULATE(SUMX('Transaction', IF('Transaction'[TransactionSubCategory] = \"Income\"",
+              ", 'Transaction'[EffectiveAmount]/1.2, 0)), ",
+              "USERELATIONSHIP ( 'Date'[LongDate], 'Transaction'[EffectiveDate] ))"
+            ],
+            "formatString": "\"£\"#,0.00;-\"£\"#,0.00;\"£\"#,0.00",
+            "displayFolder": "Core",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"2057\" DisplayName=\"£ English (United Kingdom)\" Symbol=\"£\" PositivePattern=\"0\" NegativePattern=\"1\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Core.Trading.Income",
+            "expression": [
+              "[Core.SalesInvoices]+[Core.FRSProfit]",
+              ""
+            ],
+            "formatString": "\"£\"#,0.00;-\"£\"#,0.00;\"£\"#,0.00",
+            "displayFolder": "Core",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"2057\" DisplayName=\"£ English (United Kingdom)\" Symbol=\"£\" PositivePattern=\"0\" NegativePattern=\"1\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Core.CY.Trading.Income",
+            "expression": [
+              "TOTALYTD([Core.Trading.Income], 'Date'[LongDate], \"10-31\")",
+              ""
+            ],
+            "formatString": "\"£\"#,0.00;-\"£\"#,0.00;\"£\"#,0.00",
+            "displayFolder": "Core.CY",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"2057\" DisplayName=\"£ English (United Kingdom)\" Symbol=\"£\" PositivePattern=\"0\" NegativePattern=\"1\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Core.FRSProfit",
+            "expression": [
+              "CALCULATE(SUMX('Transaction', IF('Transaction'[PostedDate] < DATE(2017,10,31), 'Transaction'[Paid VAT], 0)),USERELATIONSHIP('Transaction'[EffectiveDate], 'Date'[LongDate]))",
+              "+ CALCULATE(SUMX('Transaction', IF('Transaction'[PostedDate] > DATE(2017,10,31), 'Transaction'[Paid VAT], 0)),USERELATIONSHIP('Transaction'[PostedDate], 'Date'[LongDate]))",
+              "- CALCULATE(SUMX('Transaction', IF('Transaction'[PostedDate] < DATE(2017,10,31), 'Transaction'[Actual VAT], 0)),USERELATIONSHIP('Transaction'[EffectiveDate], 'Date'[LongDate]))",
+              "- CALCULATE(SUMX('Transaction', IF('Transaction'[PostedDate] > DATE(2017,10,31), 'Transaction'[Actual VAT], 0)),USERELATIONSHIP('Transaction'[PostedDate], 'Date'[LongDate]))"
+            ],
+            "formatString": "\"£\"#,0.00;-\"£\"#,0.00;\"£\"#,0.00",
+            "displayFolder": "Core",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"2057\" DisplayName=\"£ English (United Kingdom)\" Symbol=\"£\" PositivePattern=\"0\" NegativePattern=\"1\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Core.Trading.Expenses",
+            "expression": [
+              "CALCULATE(SUMX('Transaction'",
+              ", IF(RELATED(TransactionType[TransactionSubCategory])=\"Expense\", [Amount], 0))",
+              ",USERELATIONSHIP('Date'[LongDate], 'Transaction'[EffectiveDate]))*-1",
+              "+ SUMX('Salary', [TotalPay])",
+              "+ SUMX(Salary, IF([SalaryDate] >= DATE(2016,4,15), [EmployerNIC], 0))"
+            ],
+            "formatString": "\"£\"#,0.00;-\"£\"#,0.00;\"£\"#,0.00",
+            "displayFolder": "Core",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"2057\" DisplayName=\"£ English (United Kingdom)\" Symbol=\"£\" PositivePattern=\"0\" NegativePattern=\"1\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Core.Trading.Profit",
+            "expression": "[Core.Trading.Income]-[Core.Trading.Expenses]",
+            "formatString": "\"£\"#,0.00;-\"£\"#,0.00;\"£\"#,0.00",
+            "displayFolder": "Core",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"2057\" DisplayName=\"£ English (United Kingdom)\" Symbol=\"£\" PositivePattern=\"0\" NegativePattern=\"1\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Core.Dividends",
+            "expression": [
+              "CALCULATE(SUMX('Transaction', IF('Transaction'[TransferType] = \"DIV\" ",
+              ", 'Transaction'[EffectiveAmount], 0)), ",
+              "USERELATIONSHIP ( 'Date'[LongDate], 'Transaction'[EffectiveDate] ))"
+            ],
+            "formatString": "\"£\"#,0.00;-\"£\"#,0.00;\"£\"#,0.00",
+            "displayFolder": "Core",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"2057\" DisplayName=\"£ English (United Kingdom)\" Symbol=\"£\" PositivePattern=\"0\" NegativePattern=\"1\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Core.CY.Trading.Profit",
+            "expression": "TOTALYTD([Core.Trading.Profit], 'Date'[LongDate], \"10-31\")",
+            "formatString": "\"£\"#,0.00;-\"£\"#,0.00;\"£\"#,0.00",
+            "displayFolder": "Core.CY",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"2057\" DisplayName=\"£ English (United Kingdom)\" Symbol=\"£\" PositivePattern=\"0\" NegativePattern=\"1\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Core.CY.Dividends",
+            "expression": "TOTALYTD([Core.Dividends], 'Date'[LongDate], \"10-31\")*-1",
+            "formatString": "\"£\"#,0.00;-\"£\"#,0.00;\"£\"#,0.00",
+            "displayFolder": "Core.CY",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"2057\" DisplayName=\"£ English (United Kingdom)\" Symbol=\"£\" PositivePattern=\"0\" NegativePattern=\"1\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Core.CY.CorporationTax",
+            "expression": [
+              "ROUND(IF(",
+              "[Core.CY.TotalProfit]<0,0,[Core.CY.TotalProfit]),0) ",
+              "* CALCULATE(MAXX('Transaction', RELATED('Date'[CTPct])))"
+            ],
+            "formatString": "\"£\"#,0.00;-\"£\"#,0.00;\"£\"#,0.00",
+            "displayFolder": "Core.CY",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"2057\" DisplayName=\"£ English (United Kingdom)\" Symbol=\"£\" PositivePattern=\"0\" NegativePattern=\"1\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Core.NonVATIncome",
+            "expression": [
+              "CALCULATE(SUMX('Transaction', IF('Transaction'[TransactionSubCategory] = \"Non-VAT Income\"",
+              ", 'Transaction'[EffectiveAmount], 0)), ",
+              "USERELATIONSHIP ( 'Date'[LongDate], 'Transaction'[EffectiveDate] ))"
+            ],
+            "formatString": "\"£\"#,0.00;-\"£\"#,0.00;\"£\"#,0.00",
+            "displayFolder": "Core",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"2057\" DisplayName=\"£ English (United Kingdom)\" Symbol=\"£\" PositivePattern=\"0\" NegativePattern=\"1\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Core.CY.NonVATIncome",
+            "expression": "TOTALYTD([Core.NonVATIncome], 'Date'[LongDate], \"10-31\")",
+            "formatString": "\"£\"#,0.00;-\"£\"#,0.00;\"£\"#,0.00",
+            "displayFolder": "Core.CY",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"2057\" DisplayName=\"£ English (United Kingdom)\" Symbol=\"£\" PositivePattern=\"0\" NegativePattern=\"1\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Core.CY.TotalProfit",
+            "expression": "[Core.CY.Trading.Profit]+[Core.CY.NonVATIncome]",
+            "formatString": "\"£\"#,0.00;-\"£\"#,0.00;\"£\"#,0.00",
+            "displayFolder": "Core.CY",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"2057\" DisplayName=\"£ English (United Kingdom)\" Symbol=\"£\" PositivePattern=\"0\" NegativePattern=\"1\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Core.ActualPostedVAT",
+            "expression": [
+              "CALCULATE(SUMX('Transaction', 'Transaction'[Actual VAT])",
+              ", USERELATIONSHIP('Transaction'[PostedDate], 'Date'[LongDate]))",
+              ""
+            ],
+            "formatString": "\"£\"#,0.00;-\"£\"#,0.00;\"£\"#,0.00",
+            "displayFolder": "Core",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"2057\" DisplayName=\"£ English (United Kingdom)\" Symbol=\"£\" PositivePattern=\"0\" NegativePattern=\"1\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Core.CY.ActualPostedVAT",
+            "expression": [
+              "TOTALYTD([Core.ActualPostedVAT], 'Date'[LongDate], \"10-31\")",
+              ""
+            ],
+            "formatString": "\"£\"#,0.00;-\"£\"#,0.00;\"£\"#,0.00",
+            "displayFolder": "Core.CY",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"2057\" DisplayName=\"£ English (United Kingdom)\" Symbol=\"£\" PositivePattern=\"0\" NegativePattern=\"1\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Core.CY.AvailableProfit",
+            "expression": "[Core.CY.TotalProfit]-[Core.CY.CorporationTax]-[Core.CY.Dividends]-[Core.CY.OtherExpenses]",
+            "formatString": "\"£\"#,0.00;-\"£\"#,0.00;\"£\"#,0.00",
+            "displayFolder": "Core.CY",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"2057\" DisplayName=\"£ English (United Kingdom)\" Symbol=\"£\" PositivePattern=\"0\" NegativePattern=\"1\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Core.CY.OtherExpenses",
+            "expression": [
+              "TOTALYTD([Core.OtherExpenses], 'Date'[LongDate], \"10-31\")",
+              ""
+            ],
+            "formatString": "\"£\"#,0.00;-\"£\"#,0.00;\"£\"#,0.00",
+            "displayFolder": "Core.CY",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"2057\" DisplayName=\"£ English (United Kingdom)\" Symbol=\"£\" PositivePattern=\"0\" NegativePattern=\"1\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Core.CY.YearendAvailableProfit",
+            "expression": [
+              "IF(ENDOFYEAR('Date'[LongDate], \"10-31\")=CALCULATE(MAXX('Date', [LongDate]))",
+              ", [Core.CY.AvailableProfit], 0)",
+              ""
+            ],
+            "formatString": "\"£\"#,0.00;-\"£\"#,0.00;\"£\"#,0.00",
+            "displayFolder": "Core.CY",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"2057\" DisplayName=\"£ English (United Kingdom)\" Symbol=\"£\" PositivePattern=\"0\" NegativePattern=\"1\" /></Format>"
+              }
+            ]
+          },
+          {
+            "name": "Core.AT.AvailableProfit",
+            "expression": [
+              "SUMX(FILTER(ALL('Date'[LongDate]),'Date'[LongDate]",
+              "<=MAX('Date'[LongDate])),[Core.CY.YearendAvailableProfit])",
+              "+IF(ENDOFYEAR('Date'[LongDate], \"10-31\")=CALCULATE(MAXX('Date', [LongDate]))",
+              ", 0, [Core.CY.AvailableProfit])"
+            ],
+            "formatString": "\"£\"#,0.00;-\"£\"#,0.00;\"£\"#,0.00",
+            "displayFolder": "Core.AT",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"Currency\" Accuracy=\"2\"><Currency LCID=\"2057\" DisplayName=\"£ English (United Kingdom)\" Symbol=\"£\" PositivePattern=\"0\" NegativePattern=\"1\" /></Format>"
+              }
+            ]
+          }
+        ],
+        "annotations": [
+          {
+            "name": "_TM_ExtProp_DbSchemaName",
+            "value": "FACT"
+          },
+          {
+            "name": "QueryEditorSerialization",
+            "value": [
+              "<?xml version=\"1.0\" encoding=\"UTF-16\"?><Gemini xmlns=\"QueryEditorSerialization\"><AnnotationContent><![CDATA[<RSQueryCommandText>SELECT ",
+              "[TransactionID]",
+              ",[SourceID]",
+              ",[PostedDate]",
+              ",[EffectiveDate]",
+              ",[TransactionTypeID]",
+              ",[PayeeID]",
+              ",[TransferType]",
+              ",[Amount]",
+              ",[EffectiveAmount]",
+              ",[TransactionSource] ",
+              "FROM [FACT].[vw_Transaction]</RSQueryCommandText><RSQueryCommandType>Text</RSQueryCommandType><RSQueryDesignState></RSQueryDesignState>]]></AnnotationContent></Gemini>"
+            ]
+          },
+          {
+            "name": "_TM_ExtProp_QueryDefinition",
+            "value": [
+              "SELECT ",
+              "[TransactionID]",
+              ",[SourceID]",
+              ",[PostedDate]",
+              ",[EffectiveDate]",
+              ",[TransactionTypeID]",
+              ",[PayeeID]",
+              ",[TransferType]",
+              ",[Amount]",
+              ",[EffectiveAmount]",
+              ",[TransactionSource] ",
+              "FROM [FACT].[vw_Transaction]"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Date",
+        "columns": [
+          {
+            "name": "LongDate",
+            "dataType": "dateTime",
+            "sourceColumn": "LongDate",
+            "formatString": "General Date"
+          },
+          {
+            "name": "CalendarYear",
+            "dataType": "int64",
+            "sourceColumn": "CalendarYear"
+          },
+          {
+            "name": "CalendarQuarter",
+            "dataType": "string",
+            "sourceColumn": "CalendarQuarter"
+          },
+          {
+            "name": "CalendarMonth",
+            "dataType": "string",
+            "sourceColumn": "CalendarMonth",
+            "sortByColumn": "CompanyMonthNum"
+          },
+          {
+            "name": "CalendarMonthNum",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "CalendarMonthNum"
+          },
+          {
+            "name": "FinYear",
+            "dataType": "string",
+            "sourceColumn": "FinYear"
+          },
+          {
+            "name": "CompanyYear",
+            "dataType": "string",
+            "sourceColumn": "CompanyYear"
+          },
+          {
+            "name": "CompanyQuarter",
+            "dataType": "string",
+            "sourceColumn": "CompanyQuarter"
+          },
+          {
+            "name": "CompanyMonthNum",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "CompanyMonthNum"
+          },
+          {
+            "name": "CTPct",
+            "dataType": "double",
+            "isHidden": true,
+            "sourceColumn": "CTPct"
+          },
+          {
+            "name": "CompanyMonth",
+            "dataType": "string",
+            "sourceColumn": "CompanyMonth",
+            "sortByColumn": "CompanyMonthNum"
+          },
+          {
+            "name": "FinQuarter",
+            "dataType": "string",
+            "sourceColumn": "FinQuarter"
+          },
+          {
+            "name": "FinMonth",
+            "dataType": "string",
+            "sourceColumn": "FinMonth",
+            "sortByColumn": "FinMonthNum"
+          },
+          {
+            "name": "FinMonthNum",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "FinMonthNum"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "vw_Date",
+            "source": {
+              "query": "SELECT [DIM].[vw_Date].* FROM [DIM].[vw_Date]",
+              "dataSource": "BusinessAccounting"
+            },
+            "annotations": [
+              {
+                "name": "QueryEditorSerialization",
+                "value": "<?xml version=\"1.0\" encoding=\"UTF-16\"?><Gemini xmlns=\"QueryEditorSerialization\"><AnnotationContent><![CDATA[<RSQueryCommandText>SELECT [DIM].[vw_Date].* FROM [DIM].[vw_Date]</RSQueryCommandText><RSQueryCommandType>Text</RSQueryCommandType><RSQueryDesignState></RSQueryDesignState>]]></AnnotationContent></Gemini>"
+              }
+            ]
+          }
+        ],
+        "hierarchies": [
+          {
+            "name": "Company Y-Q-M-D",
+            "levels": [
+              {
+                "name": "CompanyYear",
+                "ordinal": 0,
+                "column": "CompanyYear"
+              },
+              {
+                "name": "CompanyQuarter",
+                "ordinal": 1,
+                "column": "CompanyQuarter"
+              },
+              {
+                "name": "CompanyMonth",
+                "ordinal": 2,
+                "column": "CompanyMonth"
+              },
+              {
+                "name": "LongDate",
+                "ordinal": 3,
+                "column": "LongDate"
+              }
+            ]
+          },
+          {
+            "name": "Company Y-M-D",
+            "levels": [
+              {
+                "name": "CompanyYear",
+                "ordinal": 0,
+                "column": "CompanyYear"
+              },
+              {
+                "name": "CompanyMonth",
+                "ordinal": 1,
+                "column": "CompanyMonth"
+              },
+              {
+                "name": "LongDate",
+                "ordinal": 2,
+                "column": "LongDate"
+              }
+            ]
+          },
+          {
+            "name": "Financial Y-Q-M-D",
+            "levels": [
+              {
+                "name": "FinYear",
+                "ordinal": 0,
+                "column": "FinYear"
+              },
+              {
+                "name": "FinQuarter",
+                "ordinal": 1,
+                "column": "FinQuarter"
+              },
+              {
+                "name": "FinMonth",
+                "ordinal": 2,
+                "column": "FinMonth"
+              },
+              {
+                "name": "LongDate",
+                "ordinal": 3,
+                "column": "LongDate"
+              }
+            ]
+          },
+          {
+            "name": "Financial Y-M-D",
+            "levels": [
+              {
+                "name": "FinYear",
+                "ordinal": 0,
+                "column": "FinYear"
+              },
+              {
+                "name": "FinMonth",
+                "ordinal": 1,
+                "column": "FinMonth"
+              },
+              {
+                "name": "LongDate",
+                "ordinal": 2,
+                "column": "LongDate"
+              }
+            ]
+          }
+        ],
+        "annotations": [
+          {
+            "name": "_TM_ExtProp_DbSchemaName",
+            "value": "DIM"
+          },
+          {
+            "name": "QueryEditorSerialization",
+            "value": "<?xml version=\"1.0\" encoding=\"UTF-16\"?><Gemini xmlns=\"QueryEditorSerialization\"><AnnotationContent><![CDATA[<RSQueryCommandText>SELECT [DIM].[vw_Date].* FROM [DIM].[vw_Date]</RSQueryCommandText><RSQueryCommandType>Text</RSQueryCommandType><RSQueryDesignState></RSQueryDesignState>]]></AnnotationContent></Gemini>"
+          }
+        ]
+      },
+      {
+        "name": "DividendThreshold",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "ThresholdID",
+            "dataType": "int64",
+            "sourceColumn": "ThresholdID"
+          },
+          {
+            "name": "FinYear",
+            "dataType": "string",
+            "sourceColumn": "FinYear"
+          },
+          {
+            "name": "MinAmount",
+            "dataType": "double",
+            "sourceColumn": "MinAmount"
+          },
+          {
+            "name": "MaxAmount",
+            "dataType": "double",
+            "sourceColumn": "MaxAmount"
+          },
+          {
+            "name": "TaxPct",
+            "dataType": "double",
+            "sourceColumn": "TaxPct"
+          },
+          {
+            "name": "IsOptimumBand",
+            "dataType": "int64",
+            "sourceColumn": "IsOptimumBand"
+          },
+          {
+            "name": "NetAmountCarryOver",
+            "dataType": "double",
+            "sourceColumn": "NetAmountCarryOver"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "vw_DividendThreshold",
+            "source": {
+              "query": "SELECT [DIM].[vw_DividendThreshold].* FROM [DIM].[vw_DividendThreshold]",
+              "dataSource": "BusinessAccounting"
+            },
+            "annotations": [
+              {
+                "name": "QueryEditorSerialization"
+              },
+              {
+                "name": "TableWidgetSerialization"
+              }
+            ]
+          }
+        ],
+        "annotations": [
+          {
+            "name": "_TM_ExtProp_DbSchemaName",
+            "value": "DIM"
+          }
+        ]
+      },
+      {
+        "name": "TransactionType",
+        "columns": [
+          {
+            "name": "TransactionTypeID",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "TransactionTypeID"
+          },
+          {
+            "name": "Activity",
+            "dataType": "string",
+            "sourceColumn": "Activity"
+          },
+          {
+            "name": "TransactionCategory",
+            "dataType": "string",
+            "sourceColumn": "TransactionCategory"
+          },
+          {
+            "name": "TransactionSubCategory",
+            "dataType": "string",
+            "sourceColumn": "TransactionSubCategory"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "vw_TransactionType",
+            "source": {
+              "query": "SELECT [DIM].[vw_TransactionType].* FROM [DIM].[vw_TransactionType]",
+              "dataSource": "BusinessAccounting"
+            },
+            "annotations": [
+              {
+                "name": "QueryEditorSerialization"
+              },
+              {
+                "name": "TableWidgetSerialization"
+              }
+            ]
+          }
+        ],
+        "annotations": [
+          {
+            "name": "_TM_ExtProp_DbSchemaName",
+            "value": "DIM"
+          }
+        ]
+      },
+      {
+        "name": "Payee",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "PayeeID",
+            "dataType": "int64",
+            "sourceColumn": "PayeeID"
+          },
+          {
+            "name": "PayeeFriendlyName",
+            "dataType": "string",
+            "sourceColumn": "PayeeFriendlyName"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "vw_Payee",
+            "source": {
+              "query": "SELECT [DIM].[vw_Payee].* FROM [DIM].[vw_Payee]",
+              "dataSource": "BusinessAccounting"
+            },
+            "annotations": [
+              {
+                "name": "QueryEditorSerialization"
+              },
+              {
+                "name": "TableWidgetSerialization"
+              }
+            ]
+          }
+        ],
+        "annotations": [
+          {
+            "name": "_TM_ExtProp_DbSchemaName",
+            "value": "DIM"
+          }
+        ]
+      },
+      {
+        "name": "Salary",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "SalaryDate",
+            "dataType": "dateTime",
+            "sourceColumn": "SalaryDate",
+            "formatString": "yyyy-MM-dd",
+            "annotations": [
+              {
+                "name": "Format",
+                "value": "<Format Format=\"DateTimeCustom\" xmlns=\"\"><DateTimes><DateTime LCID=\"2057\" Group=\"ShortDate\" FormatString=\"yyyy-MM-dd\" /></DateTimes></Format>"
+              }
+            ]
+          },
+          {
+            "name": "TotalPay",
+            "dataType": "double",
+            "sourceColumn": "TotalPay"
+          },
+          {
+            "name": "TaxDeducted",
+            "dataType": "double",
+            "sourceColumn": "TaxDeducted"
+          },
+          {
+            "name": "EmployeeNIC",
+            "dataType": "double",
+            "sourceColumn": "EmployeeNIC"
+          },
+          {
+            "name": "EmployeePension",
+            "dataType": "double",
+            "sourceColumn": "EmployeePension"
+          },
+          {
+            "name": "NetPay",
+            "dataType": "double",
+            "sourceColumn": "NetPay"
+          },
+          {
+            "name": "EmployerNIC",
+            "dataType": "double",
+            "sourceColumn": "EmployerNIC"
+          },
+          {
+            "name": "EmployerPension",
+            "dataType": "double",
+            "sourceColumn": "EmployerPension"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Salary",
+            "source": {
+              "query": "SELECT [DIM].[vw_Salary].* FROM [DIM].[vw_Salary]",
+              "dataSource": "BusinessAccounting"
+            },
+            "annotations": [
+              {
+                "name": "QueryEditorSerialization"
+              },
+              {
+                "name": "TableWidgetSerialization"
+              }
+            ]
+          }
+        ],
+        "annotations": [
+          {
+            "name": "_TM_ExtProp_DbSchemaName",
+            "value": "DIM"
+          }
+        ]
+      },
+      {
+        "name": "Mgmt Info",
+        "isHidden": true,
+        "columns": [
+          {
+            "name": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+            "dataType": "int64",
+            "sourceColumn": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Mgmt Info",
+            "source": {
+              "query": [
+                "select 0 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "where 1=2"
+              ],
+              "dataSource": "BusinessAccounting"
+            },
+            "annotations": [
+              {
+                "name": "QueryEditorSerialization",
+                "value": [
+                  "&lt;?xml version=\"1.0\" encoding=\"UTF-16\"?&gt;&lt;Gemini xmlns=\"QueryEditorSerialization\"&gt;&lt;AnnotationContent&gt;&lt;![CDATA[&lt;RSQueryCommandText&gt;select 0 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                  "where 1=2&lt;/RSQueryCommandText&gt;&lt;RSQueryCommandType&gt;Text&lt;/RSQueryCommandType&gt;&lt;RSQueryDesignState&gt;&lt;/RSQueryDesignState&gt;]]&gt;&lt;/AnnotationContent&gt;&lt;/Gemini&gt;"
+                ]
+              },
+              {
+                "name": "TableWidgetSerialization"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "relationships": [
+      {
+        "name": "723c3468-65f2-4a19-b6d7-d49186c6406e",
+        "fromTable": "Transaction",
+        "fromColumn": "EffectiveDate",
+        "toTable": "Date",
+        "toColumn": "LongDate",
+        "isActive": false
+      },
+      {
+        "name": "01fd4679-74ca-4caa-849d-e5c10471e7ee",
+        "fromTable": "Transaction",
+        "fromColumn": "TransactionTypeID",
+        "toTable": "TransactionType",
+        "toColumn": "TransactionTypeID"
+      },
+      {
+        "name": "cca53d4a-8fa5-4be6-89c5-444d95f5215c",
+        "fromTable": "Transaction",
+        "fromColumn": "PayeeID",
+        "toTable": "Payee",
+        "toColumn": "PayeeID"
+      },
+      {
+        "name": "33aa7b24-3223-4bfd-87b2-993d5ca32e73",
+        "fromTable": "Salary",
+        "fromColumn": "SalaryDate",
+        "toTable": "Date",
+        "toColumn": "LongDate"
+      },
+      {
+        "name": "e6a75310-4401-413a-ae7b-5994c113c191",
+        "fromTable": "Transaction",
+        "fromColumn": "PostedDate",
+        "toTable": "Date",
+        "toColumn": "LongDate"
+      }
+    ]
+  },
+  "id": "SemanticModel"
+}

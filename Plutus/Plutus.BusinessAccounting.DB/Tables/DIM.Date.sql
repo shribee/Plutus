@@ -1,0 +1,5 @@
+﻿CREATE TABLE [DIM].[Date] (
+    [LongDate] DATETIME NOT NULL,
+    CONSTRAINT [PK_Date] PRIMARY KEY CLUSTERED ([LongDate] ASC)
+);
+

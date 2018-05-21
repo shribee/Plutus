@@ -1,0 +1,199 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{47304DB4-8211-499A-95B4-2F2989F7BEA6}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Plutus.ETL.CS</RootNamespace>
+    <AssemblyName>Plutus.ETL.CS</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>Plutus.ETL.CS.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Plutus.ETL.CS.Program</StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CsvReader, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CsvTools.1.0.12\lib\CsvReader.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.5.0-rc06\lib\net45\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controller\ApplicationController.cs" />
+    <Compile Include="Controller\ApplicationSettings.cs" />
+    <Compile Include="EFTask\ClearDown.cs" />
+    <Compile Include="ModelEntityEquality\BankCaterAllenEquality.cs" />
+    <Compile Include="ModelEntityEquality\BankEditEquality.cs" />
+    <Compile Include="ModelEntityEquality\BankEquality.cs" />
+    <Compile Include="ModelEntityEquality\BankIntouchEquality.cs" />
+    <Compile Include="ModelEntityEquality\ExpenseEditEquality.cs" />
+    <Compile Include="Model\Bank.cs">
+      <DependentUpon>BusinessAccountingDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\BankCaterAllen.cs">
+      <DependentUpon>BusinessAccountingDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\BankEdit.cs">
+      <DependentUpon>BusinessAccountingDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\BankIntouch.cs">
+      <DependentUpon>BusinessAccountingDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\BusinessAccountingDB.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BusinessAccountingDB.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\BusinessAccountingDB.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BusinessAccountingDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\BusinessAccountingDB.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BusinessAccountingDB.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Date.cs">
+      <DependentUpon>BusinessAccountingDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\DirectoryFile.cs" />
+    <Compile Include="Model\DividendThreshold.cs">
+      <DependentUpon>BusinessAccountingDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Enum.cs" />
+    <Compile Include="ModelEntityEquality\ExpenseEquality.cs" />
+    <Compile Include="ModelEntityEquality\InvoiceEquality.cs" />
+    <Compile Include="Model\Expense.cs">
+      <DependentUpon>BusinessAccountingDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\ExpenseEdit.cs">
+      <DependentUpon>BusinessAccountingDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\InputCatalog.cs">
+      <DependentUpon>BusinessAccountingDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Invoice.cs">
+      <DependentUpon>BusinessAccountingDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Payee.cs">
+      <DependentUpon>BusinessAccountingDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\PayeeMapping.cs">
+      <DependentUpon>BusinessAccountingDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Salary.cs">
+      <DependentUpon>BusinessAccountingDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Transaction.cs">
+      <DependentUpon>BusinessAccountingDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\TransactionType.cs">
+      <DependentUpon>BusinessAccountingDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Processor\BankCaterAllen.cs" />
+    <Compile Include="Processor\BankEdit.cs" />
+    <Compile Include="Processor\Bank.cs" />
+    <Compile Include="Processor\BankIntouch.cs" />
+    <Compile Include="Processor\Date.cs" />
+    <Compile Include="Processor\DividendThreshold.cs" />
+    <Compile Include="Processor\ExpenseEdit.cs" />
+    <Compile Include="Processor\Payee.cs" />
+    <Compile Include="Processor\Salary.cs" />
+    <Compile Include="Processor\Transaction.cs" />
+    <Compile Include="Processor\TransactionType.cs" />
+    <Compile Include="Processor\Expense.cs" />
+    <Compile Include="Processor\Invoice.cs" />
+    <Compile Include="Processor\PayeeMapping.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Utility\FileUtility.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Model\BusinessAccountingDB.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>BusinessAccountingDB.edmx</DependentUpon>
+      <LastGenOutput>BusinessAccountingDB.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Model\BusinessAccountingDB.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>BusinessAccountingDB.edmx</DependentUpon>
+      <LastGenOutput>BusinessAccountingDB.cs</LastGenOutput>
+    </Content>
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <EntityDeploy Include="Model\BusinessAccountingDB.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>BusinessAccountingDB.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="Model\BusinessAccountingDB.edmx.diagram">
+      <DependentUpon>BusinessAccountingDB.edmx</DependentUpon>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

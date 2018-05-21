@@ -1,0 +1,5 @@
+﻿CREATE SCHEMA [MGMT]
+    AUTHORIZATION [dbo];
+
+
+
